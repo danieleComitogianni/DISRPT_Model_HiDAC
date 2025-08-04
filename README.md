@@ -86,6 +86,16 @@ After a training run is complete, you can evaluate the best saved checkpoint on 
 
 ./.venv/bin/python main.py evaluate
 
+To Evaluate you need a test set with these fields:
+* text1
+* text2
+* framework
+* lang
+* label
+
+In our repository, we have dev1 which includes the lang. You will need to change the path in the main.py file.
+
+
 2. Evaluating the Pre-trained Model
 
 To evaluate with the pre-trained HiDAC model provided:
