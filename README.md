@@ -7,6 +7,7 @@ The model introduces a hierarchical adapter strategy that applies different adap
 # Project Structure
 
 hidac_project/
+
 ├── data/ # <-- Place your CSV data files here
 
 ├── pretrained_model/ # <-- Place the provided pre-trained model files here
