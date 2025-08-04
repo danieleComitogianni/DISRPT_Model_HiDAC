@@ -4,6 +4,8 @@ This repository contains the official implementation for the HiDAC model, a nove
 
 The model introduces a hierarchical adapter strategy that applies different adaptation methods to lower and upper transformer layers, which are trained by a decoupled dual-loss objective to improve both representation quality and final classification accuracy.
 
+**The code is meant to run in a CUDA environment with atleast 30GB of VRAM**
+
 # Project Structure
 
 hidac_project/
@@ -26,20 +28,20 @@ The model expects CSV files in the data/ directory with the following columns:
 
 * text1: The first discourse unit. (Already swapped based on dir)
 
-text2: The second discourse unit. (Already swapped based on dir)
+* text2: The second discourse unit. (Already swapped based on dir)
 
-label: The string representation of the discourse relation.
+* label: The string representation of the discourse relation.
 
-framework: The annotation framework (e.g., pdtb, rst).
+* framework: The annotation framework (e.g., pdtb, rst).
 
-lang: The three-letter language code (e.g., eng, deu).
+* lang: The three-letter language code (e.g., eng, deu).
 
 The default filenames are train.csv and dev.csv, which can be changed in src/config.py.
 
 For our experiments, we used the official train
 and dev splits to train and evaluate our models,
 excluding the instances requiring an LDC subscription. 
-As Table 1 shows, the class distribution of
+As the table below shows, the class distribution of
 the training dataset (≈170K instances) and development 
 dataset (≈28K instances) is not balanced
 with the ’elaboration’ and ’conjunction’ being over
