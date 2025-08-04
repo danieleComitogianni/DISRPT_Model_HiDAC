@@ -8,10 +8,15 @@ The model introduces a hierarchical adapter strategy that applies different adap
 
 hidac_project/
 ├── data/ # <-- Place your CSV data files here
+
 ├── pretrained_model/ # <-- Place the provided pre-trained model files here
+
 ├── src/ # <-- All source code modules (model, config, etc.)
+
 ├── main.py # <-- Main execution script for training and evaluation
+
 ├── requirements.txt # <-- Project dependencies
+
 └── README.md
 
 # Data Format
