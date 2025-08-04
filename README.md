@@ -24,7 +24,7 @@ hidac_project/
 
 The model expects CSV files in the data/ directory with the following columns:
 
-text1: The first discourse unit. (Already swapped based on dir)
+* text1: The first discourse unit. (Already swapped based on dir)
 
 text2: The second discourse unit. (Already swapped based on dir)
 
