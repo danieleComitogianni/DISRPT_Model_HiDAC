@@ -30,7 +30,7 @@ def main():
     parser_evaluate.add_argument(
         "--test_file",
         type=str,
-        default="./data/dev.csv",
+        default="./data/dev1.csv",
         help="Path to the test CSV file for evaluation."
     )
 
