@@ -31,17 +31,17 @@ label: The string representation of the discourse relation.
 
 framework: The annotation framework (e.g., pdtb, rst).
 
-lang: The two-letter language code (e.g., eng, deu).
+lang: The three-letter language code (e.g., eng, deu).
 
 The default filenames are train.csv and dev.csv, which can be changed in src/config.py.
 
 For our experiments, we used the official train
 and dev splits to train and evaluate our models,
-excluding the instances requiring an LDC subscrip-
-tion. As Table 1 shows, the class distribution of
-the training dataset (≈170K instances) and devel-
-opment dataset (≈28K instances) is not balanced
-with the ’elaboration’ and ’conjunction’ being over-
+excluding the instances requiring an LDC subscription. 
+As Table 1 shows, the class distribution of
+the training dataset (≈170K instances) and development 
+dataset (≈28K instances) is not balanced
+with the ’elaboration’ and ’conjunction’ being over
 represented while ’alternation’ and ’reformulation’
 are severely underrepresented
 
