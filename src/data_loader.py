@@ -21,55 +21,21 @@ def prepare_datasets(tokenizer, config):
             - id2label (dict): A mapping from integer IDs to string labels.
             - formalism2id (dict or None): A mapping from framework strings to IDs.
     """
-    # =========================================================================
-    # --- FOR FINAL SUBMISSION (Loads the full dataset) ---
-    # =========================================================================
-    # # Load raw data from CSV files
-    # train_df = pd.read_csv(config.train_data_path)
-    # val_df = pd.read_csv(config.val_data_path)
-    #
-    # # Create label mappings based on the training data
-    # unique_labels = sorted(train_df['label'].unique())
-    # label2id = {label: i for i, label in enumerate(unique_labels)}
-    # id2label = {i: label for i, label in enumerate(unique_labels)}
-    # train_df['label_id'] = train_df['label'].map(label2id)
-    # val_df['label_id'] = val_df['label'].map(label2id)
-    #
-    # formalism2id = None
-    # # Create formalism mappings if the 'framework' column exists
-    # if 'framework' in train_df.columns:
-    #     unique_formalisms = sorted(train_df['framework'].unique())
-    #     formalism2id = {form: i for i, form in enumerate(unique_formalisms)}
-    #     train_df['formalism_id'] = train_df['framework'].map(formalism2id)
-    #     val_df['formalism_id'] = val_df['framework'].map(formalism2id)
-    #     config.num_formalisms = len(unique_formalisms) # Dynamically update config
-    #     print(f"Found {config.num_formalisms} formalisms: {unique_formalisms}")
-    # else:
-    #     # If no framework is specified, assign a default ID of 0
-    #     train_df['formalism_id'] = 0
-    #     val_df['formalism_id'] = 0
-    # =========================================================================
-
-
-    # =========================================================================
-    # --- FOR LOCAL TESTING (Loads only 1k samples) ---
-    # =========================================================================
-    # Load a small subset of the raw data from CSV files for quick local testing
-    train_df = pd.read_csv(config.train_data_path).head(1000)
-    val_df = pd.read_csv(config.val_data_path).head(1000)
-
-    # Create label mappings based on the full training data to ensure consistency
-    full_train_df = pd.read_csv(config.train_data_path)
-    unique_labels = sorted(full_train_df['label'].unique())
+    # Load raw data from CSV files
+    train_df = pd.read_csv(config.train_data_path)
+    val_df = pd.read_csv(config.val_data_path)
+    
+    # Create label mappings based on the training data
+    unique_labels = sorted(train_df['label'].unique())
     label2id = {label: i for i, label in enumerate(unique_labels)}
     id2label = {i: label for i, label in enumerate(unique_labels)}
     train_df['label_id'] = train_df['label'].map(label2id)
     val_df['label_id'] = val_df['label'].map(label2id)
-
+    
     formalism2id = None
     # Create formalism mappings if the 'framework' column exists
-    if 'framework' in full_train_df.columns:
-        unique_formalisms = sorted(full_train_df['framework'].unique())
+    if 'framework' in train_df.columns:
+        unique_formalisms = sorted(train_df['framework'].unique())
         formalism2id = {form: i for i, form in enumerate(unique_formalisms)}
         train_df['formalism_id'] = train_df['framework'].map(formalism2id)
         val_df['formalism_id'] = val_df['framework'].map(formalism2id)
@@ -79,7 +45,7 @@ def prepare_datasets(tokenizer, config):
         # If no framework is specified, assign a default ID of 0
         train_df['formalism_id'] = 0
         val_df['formalism_id'] = 0
-    # =========================================================================
+
 
 
     def tokenize_function_dual(examples):

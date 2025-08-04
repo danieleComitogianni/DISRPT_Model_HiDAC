@@ -1,18 +1,21 @@
-HiDAC: Hierarchical Dual-Adapter Contrastive Model
+# HiDAC: Hierarchical Dual-Adapter Contrastive Model
+
 This repository contains the official implementation for the HiDAC model, a novel parameter-efficient fine-tuning framework for discourse relation classification, as submitted to the DISRPT 2025 shared task.
 
 The model introduces a hierarchical adapter strategy that applies different adaptation methods to lower and upper transformer layers, which are trained by a decoupled dual-loss objective to improve both representation quality and final classification accuracy.
 
-Project Structure
-hidac_project/
-├── data/                 # <-- Place your CSV data files here
-├── pretrained_model/     # <-- Place the provided pre-trained model files here
-├── src/                  # <-- All source code modules (model, config, etc.)
-├── main.py               # <-- Main execution script for training and evaluation
-├── requirements.txt      # <-- Project dependencies
-└── README.md            
+# Project Structure
 
-Data Format
+hidac_project/
+├── data/ # <-- Place your CSV data files here
+├── pretrained_model/ # <-- Place the provided pre-trained model files here
+├── src/ # <-- All source code modules (model, config, etc.)
+├── main.py # <-- Main execution script for training and evaluation
+├── requirements.txt # <-- Project dependencies
+└── README.md
+
+# Data Format
+
 The model expects CSV files in the data/ directory with the following columns:
 
 text1: The first discourse unit. (Already swapped based on dir)
@@ -27,11 +30,23 @@ lang: The two-letter language code (e.g., eng, deu).
 
 The default filenames are train.csv and dev.csv, which can be changed in src/config.py.
 
+For our experiments, we used the official train
+and dev splits to train and evaluate our models,
+excluding the instances requiring an LDC subscrip-
+tion. As Table 1 shows, the class distribution of
+the training dataset (≈170K instances) and devel-
+opment dataset (≈28K instances) is not balanced
+with the ’elaboration’ and ’conjunction’ being over-
+represented while ’alternation’ and ’reformulation’
+are severely underrepresented
+
+![Alt text](image.png)
+
 Setup
 Create a virtual environment (recommended):
 
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+source venv/bin/activate # On Windows, use `venv\Scripts\activate`
 
 Install dependencies:
 
@@ -43,13 +58,13 @@ Ensure your training and validation CSV files are located in the data/ directory
 How to Run
 Use the main.py script from the root directory to either train the model or run evaluation.
 
-Training
+# Training
 
 To start the full training process from scratch, run the following command. The script will use the parameters defined in src/config.py and save the best-performing model checkpoint, adapter weights, and configuration to the ./hidac-final-run/ directory.
 
 python main.py train
 
-Evaluation
+# Evaluation
 
 You can evaluate either a model you have trained yourself or the pre-trained model provided with this repository.
 
@@ -69,11 +84,16 @@ Place the provided hidac_adapters.pth and model_info.json files inside the pretr
 
 In main.py, uncomment the following line:
 
-# args.model_dir = './pretrained_model'
+args.model_dir = './pretrained_model'
 
 Run the evaluation command, pointing to your test file:
 
 python main.py evaluate --test_file ./data/your_test_file.csv
 
-Model Configuration
+# Model Configuration
+
 All model hyperparameters, including LoRA settings, loss weights, and training parameters, are centralized in the Config class within src/config.py for easy modification and experimentation.
+
+# Results
+
+![Alt text](image-1.png)
