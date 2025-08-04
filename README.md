@@ -72,7 +72,7 @@ Use the main.py script from the root directory to either train the model or run 
 
 To start the full training process from scratch, run the following command. The script will use the parameters defined in src/config.py and save the best-performing model checkpoint, adapter weights, and configuration to the ./hidac-final-run/ directory.
 
-python main.py train
+./.venv/bin/python main.py train
 
 # Evaluation
 
@@ -82,7 +82,7 @@ You can evaluate either a model you have trained yourself or the pre-trained mod
 
 After a training run is complete, you can evaluate the best saved checkpoint on a new test file.
 
-python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/your_test_file.csv
+./.venv/bin/python main.py evaluate
 
 2. Evaluating the Pre-trained Model
 
