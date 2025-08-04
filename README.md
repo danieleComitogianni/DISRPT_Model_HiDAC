@@ -43,9 +43,11 @@ are severely underrepresented
 ![Alt text](image.png)
 
 Setup
+
 Create a virtual environment (recommended):
 
 python -m venv venv
+
 source venv/bin/activate # On Windows, use `venv\Scripts\activate`
 
 Install dependencies:
@@ -53,9 +55,11 @@ Install dependencies:
 pip install -r requirements.txt
 
 Place your data:
+
 Ensure your training and validation CSV files are located in the data/ directory.
 
 How to Run
+
 Use the main.py script from the root directory to either train the model or run evaluation.
 
 # Training
