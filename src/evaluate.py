@@ -30,18 +30,18 @@ def run_evaluation(output_dir, test_data_path):
     id2label = {int(k): v for k, v in model_info['id2label'].items()}
     num_labels = model_info['num_labels']
     formalism2id = model_info.get("formalism2id", {})
-    print("✅ Configuration and mappings loaded successfully.")
+    print("Configuration and mappings loaded successfully.")
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     final_model = HiDAC(config=config, num_labels=num_labels).to(device)
     adapter_weights = torch.load(adapter_weights_path, map_location=device)
     final_model.load_state_dict(adapter_weights, strict=False)
     final_model.eval()
-    print("✅ Final HiDAC model rebuilt and adapter weights loaded.")
+    print("Final HiDAC model rebuilt and adapter weights loaded.")
 
     tokenizer = AutoTokenizer.from_pretrained(config.model_name)
     test_dataset, test_df = prepare_inference_data(tokenizer, config, test_data_path, label2id, formalism2id)
-    print("✅ Test data prepared successfully.")
+    print("Test data prepared successfully.")
 
     all_preds = []
     batch_size = 32
@@ -54,7 +54,7 @@ def run_evaluation(output_dir, test_data_path):
             all_preds.extend(preds)
 
     test_df['predictions'] = all_preds
-    print("✅ Inference complete.")
+    print("Inference complete.")
 
     print("\n" + "="*50); print("          Final HiDAC Model Performance Results"); print("="*50 + "\n")
     true_labels = test_df['label_id'].tolist()
@@ -78,4 +78,4 @@ def run_evaluation(output_dir, test_data_path):
     
     print("\n" + "="*50)
     final_model.encoder.encoder.remove_hooks()
-    print("✅ Forward hooks removed.")
+    print("Forward hooks removed.")
