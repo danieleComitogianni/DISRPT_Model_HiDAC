@@ -38,6 +38,7 @@ The model expects CSV files in the data/ directory with the following columns:
 
 The default filenames are train.csv and dev.csv, which can be changed in src/config.py.
 
+Please note that initially, when we extracted the data, some instances with underscores ended up in the dataset. We then removed them manually before we ran the experiments. In this script, we mimic what we did before.
 To extract the data into the format we have for our scripts, please clone the DISRPT repository: git clone https://github.com/disrpt/sharedtask2025.git
 into the 'data' folder. Once that is done, run data_extraction.py in the data folder to extract the data into the .csv files needed to run the Training and Evaluation.
 
