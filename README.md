@@ -24,7 +24,7 @@ hidac_project/
 
 # Data Format
 
-The model expects CSV files in the data/ directory with the following columns:
+The model expects CSV files in the data/ directory with the following columns in order to train:
 
 * text1: The first discourse unit. (Already swapped based on dir)
 
@@ -34,7 +34,6 @@ The model expects CSV files in the data/ directory with the following columns:
 
 * framework: The annotation framework (e.g., pdtb, rst).
 
-* lang: The three-letter language code (e.g., eng, deu).
 
 The default filenames are train.csv and dev.csv, which can be changed in src/config.py.
 
