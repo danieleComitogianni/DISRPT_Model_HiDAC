@@ -123,7 +123,8 @@ To evaluate a model, you need to specify the model's directory and the path to y
 * Evaluate Your Trained Model:
   
 After training, a model is saved in ./hidac-final-run/. Use this path for --model_dir.
-Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv
+
+Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./dev.csv --gold_data_dir ./data/sharedtask2025/data --predictions_dir ./predictions
 
 * Evaluate the Pre-trained Model:
 
@@ -135,7 +136,7 @@ Code: python main.py evaluate --model_dir ./pretrained_model --test_file ./data/
 
 To create prediction files that are compatible with the official evaluation_main.sh script, use the --predictions_dir argument.
 
-Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv --predictions_dir ./predictions
+Code: python main.py evaluate --model_dir ./pretrained_model --test_file ./dev.csv --gold_data_dir ./data/sharedtask2025/data --predictions_dir ./predictions
 
 * Disabling File Generation:
 
