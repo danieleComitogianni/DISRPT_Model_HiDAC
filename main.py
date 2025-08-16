@@ -33,7 +33,14 @@ def main():
         default="./dev.csv",
         help="Path to the test CSV file for evaluation."
     )
-    # --- NEW ARGUMENT ---
+
+    parser_evaluate.add_argument(
+        "--gold_data_dir",
+        type=str,
+        default="./data/sharedtask2025/data",
+        help="Path to the directory with the original gold .rels files."
+    )
+    
     parser_evaluate.add_argument(
         "--predictions_dir",
         type=str,
@@ -60,7 +67,8 @@ def main():
         run_evaluation(
             output_dir=args.model_dir, 
             test_data_path=args.test_file,
-            predictions_dir=predictions_dir # Pass the new argument
+            gold_data_dir=args.gold_data_dir,
+            predictions_dir=predictions_dir
         )
 
 if __name__ == "__main__":
