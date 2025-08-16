@@ -1,3 +1,4 @@
+# data/extract_data.py
 import os
 import pandas as pd
 
@@ -9,8 +10,6 @@ CORPORA_WITH_UNDERSCORED_TEXT = {
 }
 
 def is_underscored_instance(row):
-    # return all(c == '_' or c.isspace() for c in row["unit1_txt"]) and \
-    #        all(c == '_' or c.isspace() for c in row["unit2_txt"])
     return "__" in row["unit1_txt"] and "__" in row["unit2_txt"]
 
 def load_rel_file(rel_path):
@@ -23,10 +22,8 @@ def load_rel_file(rel_path):
 
     with open(rel_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-        # skip header if present
         start_index = 1 if lines and lines[0].strip().startswith('doc\t') else 0
 
-        # local_idx is zero-based within this .rels file
         for local_idx, line in enumerate(lines[start_index:], start=0):
             raw = line.strip()
             if not raw:
@@ -40,7 +37,7 @@ def load_rel_file(rel_path):
                     'framework': framework,
                     'subcorpus': subcorpus,
                     'file': file_name,
-                    'row_in_file': local_idx,      
+                    'row_in_file': local_idx,
                     'doc': parts[0],
                     'unit1_toks': parts[1],
                     'unit2_toks': parts[2],
@@ -121,21 +118,16 @@ global_train, global_dev = load_global_splits(corpora_dirs)
 df_train = pd.DataFrame(global_train)
 df_dev   = pd.DataFrame(global_dev)
 
-train_cols = ['ordered_arg1', 'ordered_arg2', 'framework', 'lang', 'dataset', 'label_text']
-dev_cols   = ['ordered_arg1', 'ordered_arg2', 'framework', 'lang', 'dataset', 'label_text']
 
-df_train_extracted = df_train[train_cols].copy()
-df_dev_extracted   = df_dev[dev_cols].copy()
+df_train_extracted = df_train.copy()
+df_dev_extracted   = df_dev.copy()
 
 rename_map = {'ordered_arg1': 'text1', 'ordered_arg2': 'text2', 'label_text': 'label'}
 df_train_extracted.rename(columns=rename_map, inplace=True)
 df_dev_extracted.rename(columns=rename_map, inplace=True)
 
-ordered_cols = ['text1', 'text2', 'framework', 'lang', 'dataset', 'label']
-df_train_extracted = df_train_extracted[ordered_cols]
-df_dev_extracted   = df_dev_extracted[ordered_cols]
 
-print(f"Columns in extracted TRAIN dataset: {list(df_train_extracted.columns)}")
+print(f"\nColumns in extracted TRAIN dataset: {list(df_train_extracted.columns)}")
 print(f"Columns in extracted DEV dataset:   {list(df_dev_extracted.columns)}")
 
 print("\nFirst 5 rows of extracted data:")
@@ -147,5 +139,5 @@ df_train_extracted.to_csv(output_path_train, index=False)
 output_path_dev = './dev.csv'
 df_dev_extracted.to_csv(output_path_dev, index=False)
 
-print(f"Train shape: {df_train_extracted.shape} | Dev shape: {df_dev_extracted.shape}")
+print(f"\nTrain shape: {df_train_extracted.shape} | Dev shape: {df_dev_extracted.shape}")
 print(f"Columns: {list(df_train_extracted.columns)}")
