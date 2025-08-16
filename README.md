@@ -124,7 +124,7 @@ To evaluate a model, you need to specify the model's directory and the path to y
   
 After training, a model is saved in ./hidac-final-run/. Use this path for --model_dir.
 
-Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./dev.csv --gold_data_dir ./data/sharedtask2025/data --predictions_dir ./predictions
+Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv --gold_data_dir ./data/sharedtask2025/data --predictions_dir ./predictions
 
 * Evaluate the Pre-trained Model:
 
