@@ -35,11 +35,12 @@ def load_rel_file(rel_path):
       parts = line.split('\t')
       if len(parts) == 15:
         row = {
-              'corpus_name': corpus_name,
+              'dataset': corpus_name,
               'lang': language,
               'framework': framework,
               'subcorpus': subcorpus,
               'file': file_name,
+              'row_in_file': local_idx,
               'doc': parts[0],
               'unit1_toks': parts[1],
               'unit2_toks': parts[2],
