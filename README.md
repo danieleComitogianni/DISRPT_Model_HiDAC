@@ -115,6 +115,42 @@ Run the evaluation command, pointing to your test file:
 
 python main.py evaluate --test_file ./data/your_test_file.csv
 
+**Updated Evaluation**:
+1. Standard Evaluation
+
+To evaluate a model, you need to specify the model's directory and the path to your test file. The script will print performance metrics broken down by Overall, Language, Framework, and Dataset.
+
+* Evaluate Your Trained Model:
+  
+After training, a model is saved in ./hidac-final-run/. Use this path for --model_dir.
+Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv
+
+* Evaluate the Pre-trained Model:
+
+Place the provided hidac_adapters.pth and model_info.json files inside the ./pretrained_model/ directory. Then, point --model_dir to it.
+
+Code: python main.py evaluate --model_dir ./pretrained_model --test_file ./data/dev.csv
+
+2. Generating Files for the Official Scorer
+
+To create prediction files that are compatible with the official evaluation_main.sh script, use the --predictions_dir argument.
+
+Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv --predictions_dir ./predictions
+
+* Disabling File Generation:
+
+If you only want to see the metrics printed to the console, you can disable file generation by setting the argument to None.
+
+Code: python main.py evaluate --model_dir ./hidac-final-run --test_file ./data/dev.csv --predictions_dir None
+
+3. Using the Official DISRPT Scorer
+
+Once you have generated the prediction files (e.g., in ./predictions), you can run the official DISRPT evaluation script. You will need the original gold data from the sharedtask2025 repository.
+
+Example code: bash evaluation_main.sh -g ./data/sharedtask2025/data -p ./predictions -o ./eval_results -d dev
+
+
+
 # Model Configuration
 
 All model hyperparameters, including LoRA settings, loss weights, and training parameters, are centralized in the Config class within src/config.py for easy modification and experimentation.
