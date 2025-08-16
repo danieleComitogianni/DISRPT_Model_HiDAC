@@ -68,7 +68,7 @@ def generate_disrpt_output_files(df, id2label, test_data_path, gold_data_dir, ou
 
         print(f"  ✅ Saved predictions for {dataset_name} to {pred_filepath}")
 
-def run_evaluation(output_dir, test_data_path, predictions_dir=None):
+def run_evaluation(output_dir, test_data_path, gold_data_dir, predictions_dir=None):
     """Loads a trained model and runs evaluation on the test set."""
     model_info_path = os.path.join(output_dir, 'model_info.json')
     adapter_weights_path = os.path.join(output_dir, 'hidac_adapters.pth')
