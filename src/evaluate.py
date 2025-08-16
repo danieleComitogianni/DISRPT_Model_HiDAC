@@ -11,52 +11,62 @@ from src.config import Config
 from src.model import HiDAC
 from src.data_loader import prepare_inference_data
 
-def generate_disrpt_output_files(df, id2label, test_data_path, output_dir):
-    """Generates prediction files compatible with the official DISRPT script."""
-    print(f"\nGenerating prediction files in '{output_dir}'...")
+def generate_disrpt_output_files(df, id2label, test_data_path, gold_data_dir, output_dir):
+    """
+    Generates prediction files by replacing the label column in the original gold files.
+    This is a robust method that preserves all original formatting.
+    """
+    print(f"\nGenerating scorer-proof prediction files in '{output_dir}'...")
     os.makedirs(output_dir, exist_ok=True)
 
-    # Map predicted IDs to their string labels
     df['predicted_label'] = df['predictions'].map(id2label)
-
-    # Determine the split name ('dev' or 'test') from the input file name
     split_name = 'dev' if 'dev' in os.path.basename(test_data_path).lower() else 'test'
 
-    output_columns = [
-        'doc', 'unit1_toks', 'unit2_toks', 'unit1_txt', 'unit2_txt',
-        'unit1_raw_text', 'unit2_raw_text', 's1_toks', 's2_toks',
-        'unit1_sent', 'unit2_sent', 'dir', 'type',
-        'orig_label',  
-        'label_text'   
-    ]
-
     for dataset_name in df['dataset'].unique():
+        # Get predictions for the current dataset, sorted in original file order
         dataset_df = df[df['dataset'] == dataset_name].copy()
-        
-        # Sort by the original row order to match the gold file
         dataset_df.sort_values(by='row_in_file', inplace=True)
+        predictions = dataset_df['predicted_label'].tolist()
 
-        # Replace original labels with predictions
-        dataset_df['orig_label'] = dataset_df['predicted_label']
-        dataset_df['label_text'] = dataset_df['predicted_label']
+        # Define paths for the original gold file and the new prediction file
+        gold_filename = f"{dataset_name}_{split_name}.rels"
+        gold_filepath = os.path.join(gold_data_dir, dataset_name, gold_filename)
 
-        # Create dataset-specific directory
-        dataset_output_dir = os.path.join(output_dir, dataset_name)
-        os.makedirs(dataset_output_dir, exist_ok=True)
+        pred_output_dir = os.path.join(output_dir, dataset_name)
+        os.makedirs(pred_output_dir, exist_ok=True)
+        pred_filepath = os.path.join(pred_output_dir, gold_filename)
 
-        # Construct file name and path
-        output_filename = f"{dataset_name}_{split_name}.rels"
-        output_filepath = os.path.join(dataset_output_dir, output_filename)
+        if not os.path.exists(gold_filepath):
+            print(f"  ❌ Warning: Gold file not found at {gold_filepath}. Skipping {dataset_name}.")
+            continue
 
-        # Write to file
-        dataset_df.to_csv(
-            output_filepath,
-            sep='\t',
-            header=True, 
-            index=False,
-            columns=output_columns
-        )
-        print(f"  ✅ Saved predictions for {dataset_name} to {output_filepath}")
+        with open(gold_filepath, 'r', encoding='utf-8') as f_gold, \
+             open(pred_filepath, 'w', encoding='utf-8') as f_pred:
+
+            lines = f_gold.readlines()
+            header_present = lines and lines[0].strip().startswith('doc\t')
+            
+            if header_present:
+                f_pred.write(lines[0]) # Write original header as is
+                data_lines = lines[1:]
+            else:
+                data_lines = lines
+
+            if len(predictions) != len(data_lines):
+                print(f"  ❌ Warning: Mismatch between prediction count ({len(predictions)}) and data line count ({len(data_lines)}) for {dataset_name}. Skipping.")
+                continue
+
+            for i, line in enumerate(data_lines):
+                parts = line.strip().split('\t')
+                if len(parts) == 15:
+                    # Replace the last two columns (orig_label and label_text)
+                    parts[13] = predictions[i]
+                    parts[14] = predictions[i]
+                    f_pred.write('\t'.join(parts) + '\n')
+                else:
+                    f_pred.write(line) # Write malformed lines as-is
+
+        print(f"  ✅ Saved predictions for {dataset_name} to {pred_filepath}")
 
 def run_evaluation(output_dir, test_data_path, predictions_dir=None):
     """Loads a trained model and runs evaluation on the test set."""
@@ -133,7 +143,7 @@ def run_evaluation(output_dir, test_data_path, predictions_dir=None):
     print("\n" + "="*50)
 
     if predictions_dir:
-        generate_disrpt_output_files(test_df, id2label, test_data_path, predictions_dir)
+        generate_disrpt_output_files(test_df, id2label, test_data_path, gold_data_dir, predictions_dir)
 
     final_model.encoder.encoder.remove_hooks()
     print("\nForward hooks removed.")
